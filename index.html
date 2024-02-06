@@ -113,7 +113,7 @@
               </tr>
             </thead>
             <tbody>
-              <template v-if="carts.final_total !== 0">
+              <template v-if="carts.carts.length">
                 <tr v-for="cart in carts.carts" :key="cart.id">
                   <td>
                     <button

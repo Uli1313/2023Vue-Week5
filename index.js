@@ -154,6 +154,8 @@ const app = Vue.createApp({
         const res = await axios.get(url);
         console.log(2);
         this.carts = res.data.data;
+        console.log("total", this.carts.final_total);
+        console.log("cart length", this.carts.carts.length);
       } catch (err) {
         alert(err.data.message);
       }
