@@ -63,6 +63,8 @@ const app = Vue.createApp({
         },
         message: "",
       },
+      isLoading: true,
+      dataReady: false,
     };
   },
   components: {
@@ -70,18 +72,18 @@ const app = Vue.createApp({
     VForm: Form,
     VField: Field,
     ErrorMessage: ErrorMessage,
+    loading: VueLoading.Component,
   },
   methods: {
-    getProducts() {
+    async getProducts() {
       const url = `${apiUrl}/api/${apiPath}/products/all`;
-      axios
-        .get(url)
-        .then((res) => {
-          this.products = res.data.products;
-        })
-        .catch((err) => {
-          alert(err.data.message);
-        });
+      try {
+        const res = await axios.get(url);
+        console.log(1);
+        this.products = res.data.products;
+      } catch (err) {
+        alert(err.data.message);
+      }
     },
     openModal(product) {
       this.tempProduct = product;
@@ -146,17 +148,17 @@ const app = Vue.createApp({
           alert(err.data.message);
         });
     },
-    getCart() {
+    async getCart() {
       const url = `${apiUrl}/api/${apiPath}/cart`;
-      axios
-        .get(url)
-        .then((res) => {
-          this.carts = res.data.data;
-        })
-        .catch((err) => {
-          alert(err.data.message);
-        });
+      try {
+        const res = await axios.get(url);
+        console.log(2);
+        this.carts = res.data.data;
+      } catch (err) {
+        alert(err.data.message);
+      }
     },
+
     submitOrder() {
       if (!this.carts.carts.length) {
         alert("購物車內沒有商品，無法送出訂單");
@@ -176,9 +178,12 @@ const app = Vue.createApp({
         });
     },
   },
-  mounted() {
-    this.getProducts();
-    this.getCart();
+  async mounted() {
+    await this.getProducts();
+    await this.getCart();
+    console.log(3);
+    this.dataReady = true;
+    this.isLoading = false;
   },
 });
 
